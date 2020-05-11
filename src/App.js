@@ -1,24 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useContext } from 'react';
+
+import { Router, Redirect } from '@reach/router'
+
 import './App.css';
 
+import LoginPage from './pages/login';
+import TweetComponent from './components/tweets/tweetform';
+import { Context } from './Context';
+
+import Header from './pages/header/header';
+import Profile from './components/profile/profile';
+import Signup from './components/login/signup';
+import { setUpAxios } from './utils/user_auth';
+import TweetDetail from './pages/tweets/twee-detail';
+
 function App() {
+  
+  const { isAuth } = useContext(Context)
+  if(isAuth){
+    setUpAxios(sessionStorage.getItem('token'))
+  }
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+        <Header />
+        <div className="col-md-10 col-sm-12 mx-auto mt-3">
+          <Router>
+            <TweetComponent path='/' />
+            <Profile path="/profile/:username"></Profile>
+            <TweetDetail path="/tweets/:id"/>
+            { !isAuth && <LoginPage path='/login' />}
+            { isAuth && <Redirect from='/login' to='/' noThrow />}
+            { !isAuth && <Signup path="/signup"></Signup>}
+          </Router>
+        </div>
     </div>
   );
 }
