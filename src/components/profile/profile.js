@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Loading from '../general/loading'
-import { getUser, getUserTweets } from '../../services/users'
+import { getUserTweets } from '../../services/users'
 import './styles.css'
 import TweetHandle from '../tweets/tweetlist'
+import { useUser } from '../../hooks/userHook'
 const DEFAULT_PICTURE = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRqr46h67Clm1h_FM50SqaPmVp2ETO_41NRHw6PKK6dBLqRZ7hh&usqp=CAU"
 
 function BannerProfile({ picture = DEFAULT_PICTURE, nombre, username, biografia='' }){
@@ -28,26 +29,16 @@ function NavTweet(){
 
 
 function Profile(props){
-    const [user, setUser] = useState(null)
     const username = props.username
 
-    useEffect(() => {
-        console.log('Para hacer peticion')
-        getUser(username)
-        .then(response => {
-            setUser(response.data)
-        })
-        .catch((error) => {
-            // Handle error
-        })
-    }, [ username ])
-
-    if(!user){
+    const [ user, loading ] = useUser(username)
+    
+    if(loading){
         return <Loading></Loading>
     }
 
     return <div>
-        <BannerProfile nombre={user.nombre} username={username} biografia={user.profile.biografia}></BannerProfile>
+        <BannerProfile nombre={user.nombre} username={username} biografia={user.profile.biografia} picture={user.profile.picture}></BannerProfile>
         <NavTweet></NavTweet>
         <div className="col-md-6 col-sm-12">
             <TweetHandle username={username} newTweets={[]} getTweets={getUserTweets}></TweetHandle>

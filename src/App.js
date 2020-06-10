@@ -13,6 +13,7 @@ import Profile from './components/profile/profile';
 import Signup from './components/login/signup';
 import { setUpAxios } from './utils/user_auth';
 import TweetDetail from './pages/tweets/twee-detail';
+import SettingProfile from './components/profile/settings';
 
 function App() {
   
@@ -32,6 +33,7 @@ function App() {
             { !isAuth && <LoginPage path='/login' />}
             { isAuth && <Redirect from='/login' to='/' noThrow />}
             { !isAuth && <Signup path="/signup"></Signup>}
+            { isAuth && <SettingProfile path="/profile/:username/settings"></SettingProfile>}
           </Router>
         </div>
     </div>

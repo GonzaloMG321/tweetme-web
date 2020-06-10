@@ -18,7 +18,7 @@ function Header(){
         <Nav>
            {isAuth && <NavDropdown title={nombre} id="basic-nav-dropdown">
                 <Link to={`/profile/${username}`} className="dropdown-item">Mi perfil</Link>
-                <Link to={`/profile/${username}`} className="dropdown-item">Editar información</Link>
+                <Link to={`/profile/${username}/settings`} className="dropdown-item">Editar información</Link>
             </NavDropdown>}
             { !isAuth && <LoginButtonComponent />}
             { isAuth && <LogoutButtonComponent /> }

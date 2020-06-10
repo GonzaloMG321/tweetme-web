@@ -15,3 +15,7 @@ export function getUser(username){
 export function getUserTweets(username){
     return axios.get(`${URL}/${username}/tweets/`)
 }
+
+export function updateUser(username, data){
+    return axios.put(`${URL}/${username}/`, data)
+}
