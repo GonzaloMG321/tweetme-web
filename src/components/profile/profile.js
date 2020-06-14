@@ -6,13 +6,14 @@ import TweetHandle from '../tweets/tweetlist'
 import { useUser } from '../../hooks/userHook'
 const DEFAULT_PICTURE = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRqr46h67Clm1h_FM50SqaPmVp2ETO_41NRHw6PKK6dBLqRZ7hh&usqp=CAU"
 
-function BannerProfile({ picture = DEFAULT_PICTURE, nombre, username, biografia='' }){
+function BannerProfile({ nombre, username, apellido_paterno='', apellido_materno='', profile={ picture: DEFAULT_PICTURE, biografia:''} }){
+    console.log(profile)
     return <div className="banner-profile media">
-          <img src={picture} className="h-75 img-fluid img-thumbnail rounded-pill" alt={nombre} />
+          <img src={profile.picture ? profile.picture: DEFAULT_PICTURE}  className="h-75 img-fluid img-thumbnail rounded-pill" alt={nombre} />
           <div className="media-body mx-3">
-            <h6>{nombre}</h6>
+            <h6>{nombre} {apellido_paterno} {apellido_materno}</h6>
             <p className="mb-1 text-muted small">@{username}</p>
-<p>{biografia}</p>
+            <p>{profile.biografia}</p>
           </div>
     </div>
 }
@@ -32,13 +33,13 @@ function Profile(props){
     const username = props.username
 
     const [ user, loading ] = useUser(username)
-    
+    console.log(user)
     if(loading){
         return <Loading></Loading>
     }
 
     return <div>
-        <BannerProfile nombre={user.nombre} username={username} biografia={user.profile.biografia} picture={user.profile.picture}></BannerProfile>
+        <BannerProfile {...user} ></BannerProfile>
         <NavTweet></NavTweet>
         <div className="col-md-6 col-sm-12">
             <TweetHandle username={username} newTweets={[]} getTweets={getUserTweets}></TweetHandle>
