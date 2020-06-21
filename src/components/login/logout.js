@@ -4,7 +4,6 @@ import { Context } from '../../Context'
 
 const TEXT_LOGOUT = 'Cerrar sesión'
 const LINK_TO = '/login'
-
 const TEXT_LOGIN = 'Iniciar sesión'
 
 export function LogoutButtonComponent(){ 

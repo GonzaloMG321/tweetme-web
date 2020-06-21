@@ -85,7 +85,8 @@ function Tweet( props ){
                     event.stopPropagation()
                     retweet(tweet.id)
                 }}
-                className="btn btn-outline-primary btn-sm" loading={loading}>
+                className="btn btn-outline-primary btn-sm" 
+                loading={loading}>
             </LoadingButton>
             </div> }
         </div>

@@ -4,14 +4,11 @@ import { useUser } from '../../hooks/userHook'
 import Loading from '../general/loading'
 import { updateUser } from '../../services/users'
 
-
-
 function SettingProfile( { username }){
-    const [ user, loading, nombre, apellidoPaterno, apellidoMaterno, biografia, picture ] = useUser(username)
+    const [ loading, nombre, apellidoPaterno, apellidoMaterno, biografia, picture ] = useUser(username)
     
     const onSubmit = (event) => {
         event.preventDefault()
-        console.log(picture.file)
         const form = new FormData()
         form.append('nombre', nombre.value)
         form.append('apellido_paterno', apellidoPaterno.value)

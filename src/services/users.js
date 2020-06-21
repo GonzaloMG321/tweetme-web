@@ -19,3 +19,17 @@ export function getUserTweets(username){
 export function updateUser(username, data){
     return axios.put(`${URL}/${username}/`, data)
 }
+
+export function followUnfollowUser(username, data){
+    return axios.post(`${URL}/${username}/follow_unfollow/`, data)
+}
+
+export function getUserInformation(username){
+    return axios.get(`${URL}/${username}/information/`)
+}
+
+export function getFollowers(username, source){
+    return axios.get(`${URL}/${username}/seguidores/`, {
+        cancelToken: source.token,
+    })
+}

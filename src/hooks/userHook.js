@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
-import { getUser } from "../services/users";
+import { useEffect, useState } from "react";
+import { getUser, followUnfollowUser } from "../services/users";
+import { DEJAR_DE_SEGUIR, SEGUIR, UNFOLLOW, FOLLOW } from "../constants/general";
 
 
 export const useUser = (username) => {
-    const [ user, setUser ] = useState(null)
     const [ loading, setLoading ] = useState(true)
     const [ nombre, setNombre ] = useState('')
     const [ apellidoPaterno, setApellidoPaterno ] = useState('')
@@ -38,8 +38,6 @@ export const useUser = (username) => {
             setApellidoPaterno(response.data.apellido_paterno)
             setApellidoMaterno(response.data.apellido_materno)
             setBiografia(response.data.profile.biografia)
-
-            setUser(response.data)
             setLoading(false);
         })
         .catch(() => {
@@ -47,7 +45,7 @@ export const useUser = (username) => {
         })
     }, [ username ])
 
-    return [ user, 
+    return [
             loading, 
             {
                 value: nombre, 
@@ -71,4 +69,34 @@ export const useUser = (username) => {
             }
             
         ]
+}
+
+
+export const useFollowUnfollow = ( initialState = false, username) => {
+    const [ mensajeSeguir, setMensjeSeguir ] = useState(initialState ? DEJAR_DE_SEGUIR: SEGUIR)
+    const [ loading, setLoading ] = useState(false)
+    const [ sigues, setSigues ] = useState(initialState)
+    
+    const followUnfollow = () => {
+        const action = sigues ? UNFOLLOW: FOLLOW
+        const mensaje = action === FOLLOW ? DEJAR_DE_SEGUIR: SEGUIR
+
+        setLoading(true)
+        followUnfollowUser(username, { action })
+        .then(() => {
+            setLoading(false)
+            setMensjeSeguir(mensaje)
+            setSigues( action === FOLLOW )
+        })
+        .catch(error => {
+            setLoading(false)
+            console.log( error )
+        })
+    }
+
+    return {
+        mensajeSeguir,
+        followUnfollow,
+        loading
+    }
 }
