@@ -3,7 +3,7 @@ import Loading, { LoadingButton } from '../general/loading'
 import { getUserTweets, getUserInformation } from '../../services/users'
 import './styles.css'
 import TweetHandle from '../tweets/tweetlist'
-import Followers from './followers'
+import { Followers, Following} from './followers'
 import { Context } from '../../Context'
 import { AppConfig } from '../../constants/general'
 import { useFollowUnfollow } from '../../hooks/userHook'
@@ -11,7 +11,7 @@ import { useFollowUnfollow } from '../../hooks/userHook'
 const DEFAULT_PICTURE = AppConfig.DEFAULT_PICTURE
 
 const TAB_TWEETS = 'tweets'
-const TAB_FOTOS = 'fotos'
+const TAB_SIGUIENDO = 'siguiendo'
 const TAB_SEGUIDORES = 'seguidores'
 
 function BannerProfile({ 
@@ -52,7 +52,7 @@ function BannerProfile({
 
 function NavTweet({ changeTab, actual=TAB_TWEETS }){
     const tweetsActivo = actual === TAB_TWEETS ? 'active': ''
-    const fotosActivo = actual === TAB_FOTOS ? 'active': ''
+    const siguiendoActivo = actual === TAB_SIGUIENDO ? 'active': ''
     const seguidoresActivo = actual === TAB_SEGUIDORES ? 'active': ''
 
     return <nav>
@@ -67,16 +67,16 @@ function NavTweet({ changeTab, actual=TAB_TWEETS }){
                     changeTab(TAB_TWEETS)
                 }}
                 >Tweets</a>
-            <a className={`nav-item nav-link ${fotosActivo}`} 
+            <a className={`nav-item nav-link ${siguiendoActivo}`} 
                 data-toggle="tab" 
-                href="#fotos" 
+                href="#siguiendo" 
                 role="tab" 
                 aria-controls="nav-profile" 
                 aria-selected="false"
                 onClick={() =>{
-                    changeTab( TAB_FOTOS )
+                    changeTab( TAB_SIGUIENDO )
                 }}
-                >Fotos</a>
+                >Siguiendo</a>
             <a className={`nav-item nav-link ${seguidoresActivo}`} 
                 data-toggle="tab" 
                 href="#seguidores" 
@@ -94,7 +94,6 @@ function NavTweet({ changeTab, actual=TAB_TWEETS }){
 
 
 function Profile({ username }){
-    console.log(username)
     const [ user, setUser] = useState(null)
     const [ loading, setLoading ] = useState(true)
     const [ tab, setTab ] = useState(TAB_TWEETS)
@@ -122,9 +121,9 @@ function Profile({ username }){
         <NavTweet changeTab={setTab} actual={ tab }></NavTweet>
         <div className="col-md-8 col-sm-12">
             { tab === TAB_TWEETS ?
-                <TweetHandle username={username} newTweets={[]} getTweets={getUserTweets}></TweetHandle>: null }
-            {tab === TAB_FOTOS ? <div>Fotos</div>: null}
-            {tab === TAB_SEGUIDORES ? <Followers username={username}></Followers>: null}
+                <TweetHandle username={ username } newTweets={[]} getTweets={ getUserTweets }></TweetHandle>: null }
+            {tab === TAB_SIGUIENDO ? <Following username={ username }></Following>: null}
+            {tab === TAB_SEGUIDORES ? <Followers username={ username }></Followers>: null}
         </div>
     </div>
 }

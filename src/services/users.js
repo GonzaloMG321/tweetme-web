@@ -33,3 +33,9 @@ export function getFollowers(username, source){
         cancelToken: source.token,
     })
 }
+
+export function getFollowing(username, source){
+    return axios.get(`${URL}/${username}/siguiendo/`, {
+        cancelToken: source.token,
+    })
+}

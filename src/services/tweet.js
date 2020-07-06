@@ -7,6 +7,10 @@ export function getTweets(){
     return axios.get(`${URL}/`)
 }
 
+export function getFeed(){
+    return axios.get(`${URL}/feed/`)
+}
+
 export function getTweet(tweetId){
     return axios.get(`${URL}/${tweetId}/`)
 }

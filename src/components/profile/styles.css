@@ -5,8 +5,21 @@
 .picture_profile_mini{
     width: 50px;
     height: 50px;
+    display: inline-block;
 }
 
 .picture_profile_mini img{
     height: 100%;
+}
+
+.svg-cursor{
+    cursor: pointer;
+}
+
+.like-color{
+    color: #bb0404
+}
+
+.border-tweet{
+    border: 1px solid whitesmoke
 }
