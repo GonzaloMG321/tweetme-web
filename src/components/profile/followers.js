@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { getFollowers, getFollowing } from '../../services/users'
-import { AppConfig } from '../../constants/general'
 import LinkButton from '../general/link-button'
 import { Link } from '@reach/router'
 import Axios from 'axios'
 import { useFollowUnfollow } from '../../hooks/userHook'
 import { LoadingButton } from '../general/loading'
-const DEFAULT_PICTURE = AppConfig.DEFAULT_PICTURE
+import { UserPicture } from '../general/tweet'
 
-export function UserPicture({ picture }){
-    return <div className="picture_profile_mini m-2">
-            <img src={picture ? `${picture}`: DEFAULT_PICTURE} alt='' className="img-fluid rounded-circle"></img>
-        </div>
-}
 
 function Follower({ follower }){
     const { username } = follower

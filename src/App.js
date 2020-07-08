@@ -5,14 +5,14 @@ import { Router, Redirect } from '@reach/router'
 import './App.css';
 
 import LoginPage from './pages/login';
-import TweetComponent from './components/tweets/tweetform';
+import Feed from './components/tweets/feed';
 import { Context } from './Context';
 
 import Header from './pages/header/header';
 import Profile from './components/profile/profile';
 import Signup from './components/login/signup';
 import { setUpAxios } from './utils/user_auth';
-import TweetDetail from './pages/tweets/twee-detail';
+import TweetDetail from './components/tweets/tweet-detail';
 import SettingProfile from './components/profile/settings';
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
         <Header />
         <div className="col-md-10 col-sm-12 mx-auto mt-3">
           <Router>
-            <TweetComponent path='/' />
+            <Feed path='/' />
             <Profile path="/profile/:username"></Profile>
             <TweetDetail path="/tweets/:id"/>
             { !isAuth && <LoginPage path='/login' />}

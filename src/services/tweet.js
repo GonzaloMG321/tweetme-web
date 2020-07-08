@@ -30,3 +30,13 @@ export function retweet(tweetId, content){
         content: content
     })
 }
+
+export function makeComment(tweetId, content){
+    return axios.post(`${URL}/${tweetId}/comment/`, {
+        content: content
+    })
+}
+
+export function listComment(tweetId){
+    return axios.get(`${URL}/${tweetId}/comment/`)
+}

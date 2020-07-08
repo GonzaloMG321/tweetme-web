@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import TweetHandle from './tweetlist'
+import TweetHandle from './tweethandle'
 import { createTweet, getTweets } from '../../services/tweet'
 
-function TweetComponent(){
+function FeedComponent(){
     const [ tweet, setTweet ] = useState('')
     const [ newTweets, setNewTweets ] = useState([])
     const handleSubmit = ( event ) => {
@@ -40,4 +40,4 @@ function TweetComponent(){
     </div>
 }
 
-export default TweetComponent
+export default FeedComponent

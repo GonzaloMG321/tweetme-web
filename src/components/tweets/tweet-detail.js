@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { getTweet } from '../../services/tweet'
-import Loading from '../../components/general/loading'
-import Tweet from '../../components/tweets/tweet'
-import Alert from '../../components/general/alerta'
+import { getTweet, listComment } from '../../services/tweet'
+import Loading from '../general/loading'
+import Tweet from './tweet'
+import Alert from '../general/alerta'
 
 function TweetDetail({ id }){
     const [ tweet, setTweet ] = useState({})
@@ -35,7 +35,7 @@ function TweetDetail({ id }){
         return <Loading />
     }
 
-    return <div>
+    return <div className="col-md-8 col-sm-12">
         { retwiteado && <Alert mensaje="Retwiteado correctamente" className="alert alert-success"></Alert>}
         <Tweet 
             key={tweet.id} 
@@ -43,6 +43,9 @@ function TweetDetail({ id }){
             handleRetweet={handleRetweet} 
             className="my-4 py-4 px-3 border bg-white text-dark" 
             displayButton={true}></Tweet>
+        <div>
+            comentarios
+        </div>
     </div>
 }
 
