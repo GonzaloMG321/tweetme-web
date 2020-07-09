@@ -4,18 +4,19 @@ import { likeUnlike as setLikeUnlike, retweet as retweetAction } from '../../ser
 
 import { Link } from '@reach/router'
 import { CommentIcon, LikeButtonFill, LikeButton, RetweetIcon, UserPicture, Comment } from '../general/tweet'
-import { stopPropagation } from '../../utils/general'
+import { stopPropagation, getFechaPublicacion } from '../../utils/general'
 
 
 function Tweet( props ){
+    let { comentario } = props
+    let { detail } = props;
     let { tweet } = props
     const userOriginal = tweet.user
     const nombreUsuarioOriginal = `${userOriginal.nombre}`
     const esUnRetwet = tweet.is_retweet
     
-    if( esUnRetwet ){
-        tweet = tweet.parent
-    }
+    const fecha = new Date(tweet.created)
+    const srtFechaPublicacion = getFechaPublicacion( fecha )
 
 
     const { className } = props
@@ -52,12 +53,14 @@ function Tweet( props ){
     }
     
     const handleDetail = (tweetId) =>{
-        navigate(`/tweets/${tweetId}`)
+        if(!comentario && !detail){
+            navigate(`/tweets/${tweetId}`)
+        }
     }
 
     let nombreUsuario = ''
     if (user){
-        nombreUsuario = `${user.nombre} ${user.apellido_paterno}(@${user.username})`
+        nombreUsuario = `${user.nombre} ${user.apellido_paterno}`
     }
 
     return <div className={className} onClick={() => {
@@ -69,13 +72,14 @@ function Tweet( props ){
             </div>
             <div className='w-100'>
                 { esUnRetwet ? <p className='mb-0 text-muted small'>{ nombreUsuarioOriginal } retwitió</p>: null}
-                <Link to={`/profile/${user.username}`} className='text-dark font-weight-bold small mb-1' onClick={(event) => {
+                <Link to={`/profile/${user.username}`} className='small mb-1' onClick={(event) => {
                     event.stopPropagation()
                 }}>
-                { nombreUsuario }
+                <span className='text-dark font-weight-bold'>{ nombreUsuario }</span><span className="text-secondary "> @{user.username}  { srtFechaPublicacion }</span>
                 </Link>
                 <div>
                     <p className="mb-2">{tweet.content}</p>
+                    { !comentario &&
                     <div>
                         <CommentIcon onClick={(event) => {
                             stopPropagation(event)
@@ -95,7 +99,8 @@ function Tweet( props ){
                             stopPropagation(event)
                             retweet(tweet.id)
                         }}></RetweetIcon>
-                    </div>                
+                    </div>
+                    }              
                 </div>
                 <Comment tweetId={tweet.id} mostrar={mostrarInputComentario}
                         setMostrarInputComentario={ setMostrarInputComentario }></Comment>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getTweet, listComment } from '../../services/tweet'
+import { getTweet } from '../../services/tweet'
 import Loading from '../general/loading'
 import Tweet from './tweet'
 import Alert from '../general/alerta'
+import { ListComments } from '../general/tweet'
 
 function TweetDetail({ id }){
     const [ tweet, setTweet ] = useState({})
@@ -38,14 +39,13 @@ function TweetDetail({ id }){
     return <div className="col-md-8 col-sm-12">
         { retwiteado && <Alert mensaje="Retwiteado correctamente" className="alert alert-success"></Alert>}
         <Tweet 
+            detail={true}
             key={tweet.id} 
             tweet={tweet}
             handleRetweet={handleRetweet} 
-            className="my-4 py-4 px-3 border bg-white text-dark" 
-            displayButton={true}></Tweet>
-        <div>
-            comentarios
-        </div>
+            className="py-4 px-3 border bg-white text-dark" 
+            ></Tweet>
+        <ListComments tweetId={tweet.id}></ListComments>
     </div>
 }
 

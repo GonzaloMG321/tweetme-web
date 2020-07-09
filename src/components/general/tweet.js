@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AppConfig } from "../../constants/general"
 import { stopPropagation } from '../../utils/general'
-import { makeComment } from '../../services/tweet'
+import { makeComment, listComment } from '../../services/tweet'
+import Tweet from '../tweets/tweet'
 
 const DEFAULT_PICTURE = AppConfig.DEFAULT_PICTURE
 
@@ -45,6 +46,9 @@ export function Comment({tweetId, mostrar, setMostrarInputComentario }){
     const submitComment = event => {
         event.preventDefault()
         makeComment(tweetId, comentario)
+        .then(response => {
+            setMostrarInputComentario(false)
+        })
     }
 
     const onChangeComentario = (event) => {
@@ -80,3 +84,28 @@ export function Comment({tweetId, mostrar, setMostrarInputComentario }){
 }
 
 
+export function ListComments({ tweetId }){
+    const [ comments, setComments ] = useState([])
+
+    useEffect(() => {
+        listComment(tweetId)
+        .then(response => {
+            setComments(response.data.results)
+        })
+        .catch()
+    }, [ tweetId ])
+
+    const mapComments = comments.map(comment => {
+        return <Tweet
+            key={ comment.id }
+            detail={ true }
+            tweet={ comment }
+            comentario={ true }
+            className="py-3 px-3 border border-top-0 border-bottom-0 bg-white text-dark" 
+            >
+        </Tweet>
+    })
+    return <>
+        { mapComments }
+    </>
+}
