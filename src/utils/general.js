@@ -78,3 +78,13 @@ export const getAbreviaturaMes = ( mes ) => {
     return MESES[mes]
 } 
 
+export const compareArrayTweets = (tweets, tweetsInit) => {
+    let existe = false
+    if(tweetsInit.length > 0){
+        const tweet = tweetsInit[0]
+        existe = tweets.some(element => {
+            return tweet.id === element.id 
+        })
+    }
+    return existe
+}

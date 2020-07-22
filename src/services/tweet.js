@@ -3,12 +3,12 @@ import { AppConfig } from '../constants/general'
 
 const URL = `${AppConfig.URL_BACKEND}/tweets`
 
-export function getTweets(){
-    return axios.get(`${URL}/`)
+export function getTweets(page = 1){
+    return axios.get(`${URL}/?page=${page}`)
 }
 
-export function getFeed(){
-    return axios.get(`${URL}/feed/`)
+export function getFeed(page = 1){
+    return axios.get(`${URL}/feed/?page=${page}`)
 }
 
 export function getTweet(tweetId){

@@ -15,6 +15,10 @@ function Tweet( props ){
     const nombreUsuarioOriginal = `${userOriginal.nombre}`
     const esUnRetwet = tweet.is_retweet
     
+    if( esUnRetwet ){
+        tweet = tweet.parent
+    }
+
     const fecha = new Date(tweet.created)
     const srtFechaPublicacion = getFechaPublicacion( fecha )
 

@@ -2,6 +2,7 @@ import React, { useState , useEffect, useContext } from 'react'
 import TweetContainer from './tweetcontainer'
 import { Context } from '../../Context'
 import { getFeed } from '../../services/tweet'
+import { compareArrayTweets } from '../../utils/general'
 
 
 function TweetHandle(props){
@@ -10,19 +11,21 @@ function TweetHandle(props){
     const { newTweets } = props
     const { getTweets } = props
     const { username } = props
+    const [ page, setPage ] = useState(1)
+    const [ prevPage, setPrevPage ] = useState(1)
     
     const { isAuth } = useContext(Context)
 
     
     useEffect(() => {
         if(username){
-            getTweets(username)
+            getTweets(username, page)
             .then(response => {
                 setTweetsInit(response.data.results)
             })
         }else{
             if( isAuth ){
-                getFeed()
+                getFeed( page )
                 .then(response => {
                     setTweetsInit(response.data.results)
                 })
@@ -30,28 +33,51 @@ function TweetHandle(props){
                     console.log(error)
                 })
             }else{
-                getTweets()
+                getTweets( page )
                 .then(response => {
                     setTweetsInit(response.data.results)
                 })
             }
             
         }
-    }, [getTweets, isAuth, username])
+    }, [getTweets, isAuth, username, page])
 
     useEffect(() => {
-       let final = [...newTweets, ...tweetsInit]
+        let final = []
+        if(page === prevPage){
+            if(!compareArrayTweets(tweets, tweetsInit)){
+                final= [...newTweets, ...tweetsInit]
 
-       if (final.length !== tweets.length){
-           setTweets(final)
-       }
-    }, [newTweets, tweets, tweetsInit])
+                if (final.length !== tweets.length){
+                    setTweets(final)
+                }
+            }
+            
+            
+        }else if(page !== prevPage){
+            
+            if(!compareArrayTweets(tweets, tweetsInit)){
+                final = [...newTweets, ...tweets, ...tweetsInit]
+                setPrevPage(page)
+                setTweets(final)
+            }
+            
+        }
+        
+        
+    }, [newTweets, tweets, tweetsInit, page, prevPage])
     
     const handleRetweet = ( retweet ) => {
         setTweetsInit([retweet, ...tweets])
     } 
 
-    return <TweetContainer tweets={tweets} handleRetweet={handleRetweet}></TweetContainer>
+    return <div>
+        <TweetContainer tweets={tweets} handleRetweet={handleRetweet}></TweetContainer>
+        <button onClick={() => {
+            setPrevPage(page)
+            setPage(page + 1)
+        }}> Siguiente</button>
+    </div>
 }
 
 export default TweetHandle
