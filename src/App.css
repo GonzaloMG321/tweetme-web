@@ -42,3 +42,22 @@ ul, li, h1, h2, h3, h4, h5, h6, p, button {
   margin: 0;
   padding: 0;
 }
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.like-color{
+  color: #bb0404
+}
+
+.box-tweet{
+  border: 1px solid whitesmoke;
+
+}
+
+.box-tweet:hover{
+  background: #f4fbff !important;
+}
+
+
