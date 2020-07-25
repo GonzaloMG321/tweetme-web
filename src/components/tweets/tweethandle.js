@@ -1,8 +1,11 @@
-import React, { useState , useEffect, useContext } from 'react'
+import React, { useState , useEffect, useContext, useRef, useCallback } from 'react'
 import TweetContainer from './tweetcontainer'
 import { Context } from '../../Context'
 import { getFeed } from '../../services/tweet'
-import { compareArrayTweets } from '../../utils/general'
+import { borrarElementos } from '../../utils/general'
+import useNearScrean from '../../hooks/useNearScreen'
+import debounce from 'just-debounce-it'
+import Loading from '../general/loading'
 
 
 function TweetHandle(props){
@@ -12,71 +15,93 @@ function TweetHandle(props){
     const { getTweets } = props
     const { username } = props
     const [ page, setPage ] = useState(1)
-    const [ prevPage, setPrevPage ] = useState(1)
+    const [ isLastPage, setIsLastPage ] = useState(false)
+    const [ loading, setLoading ] = useState(false)
     
     const { isAuth } = useContext(Context)
-
-    
+    const externalRef = useRef()
+    const { isNearScreen } = useNearScrean({ 
+        externalRef: externalRef,
+        once: false
+     })
+ 
     useEffect(() => {
+        setLoading(true)
         if(username){
             getTweets(username, page)
             .then(response => {
-                setTweetsInit(response.data.results)
+                setLoading(false)
+                const { data } = response
+                setTweetsInit(data.results)
+                setIsLastPage(data.next === null)
             })
         }else{
             if( isAuth ){
                 getFeed( page )
                 .then(response => {
-                    setTweetsInit(response.data.results)
+                    setLoading(false)
+                    const { data } = response
+                    setTweetsInit(data.results)
+                    setIsLastPage(data.next === null)
                 })
                 .catch(error=> {
+                    setLoading(false)
                     console.log(error)
                 })
             }else{
                 getTweets( page )
                 .then(response => {
-                    setTweetsInit(response.data.results)
+                    setLoading(false)
+                    const { data } = response
+                    setTweetsInit(data.results)
+                    setIsLastPage(data.next === null)
                 })
             }
             
         }
     }, [getTweets, isAuth, username, page])
 
+    // Use effect cuando se cambia el valor del tweetsINit
     useEffect(() => {
-        let final = []
-        if(page === prevPage){
-            if(!compareArrayTweets(tweets, tweetsInit)){
-                final= [...newTweets, ...tweetsInit]
+        // ELimina los tweets repetidos
+        setTweets(tweets => {
+            const nuevoArrayFiltrado = borrarElementos(tweets, tweetsInit)
+            return [...nuevoArrayFiltrado,...tweetsInit]
+        })
+    }, [ tweetsInit ])
 
-                if (final.length !== tweets.length){
-                    setTweets(final)
-                }
+    // Use effect cuando hay cambios en newTweets
+    useEffect(() => {
+        setTweets(tweets => [...newTweets,...tweets])
+    }, [ newTweets ])
+
+    const handleNextPage = () => {
+        setPage(prevPage => prevPage + 1)
+    }
+
+    // se ejecuta cuando se mueve a la parte baja 
+    // y ejecuta el paginado una vez
+    const debounceHandleNextPage = useCallback(debounce(
+        () => handleNextPage(),
+        200
+    ), [])
+
+    useEffect(() => {
+        if( isNearScreen ){
+            if(!isLastPage){
+                debounceHandleNextPage()
             }
-            
-            
-        }else if(page !== prevPage){
-            
-            if(!compareArrayTweets(tweets, tweetsInit)){
-                final = [...newTweets, ...tweets, ...tweetsInit]
-                setPrevPage(page)
-                setTweets(final)
-            }
-            
         }
-        
-        
-    }, [newTweets, tweets, tweetsInit, page, prevPage])
-    
+    }, [debounceHandleNextPage, isNearScreen, isLastPage ])
+
     const handleRetweet = ( retweet ) => {
         setTweetsInit([retweet, ...tweets])
     } 
 
     return <div>
         <TweetContainer tweets={tweets} handleRetweet={handleRetweet}></TweetContainer>
-        <button onClick={() => {
-            setPrevPage(page)
-            setPage(page + 1)
-        }}> Siguiente</button>
+        { loading && <Loading></Loading>}
+        <div id="visor" ref={ externalRef }></div>
     </div>
 }
 

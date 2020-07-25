@@ -18,7 +18,7 @@ function FeedComponent(){
         createTweet(newTweet)
         .then(response => {
             const newTweetResponse = response.data
-            const newListTweets = [newTweetResponse, ...newTweets]
+            const newListTweets = [newTweetResponse]
             setNewTweets(newListTweets)
         })
         .catch(error => {

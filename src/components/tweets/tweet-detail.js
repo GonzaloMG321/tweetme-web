@@ -43,7 +43,7 @@ function TweetDetail({ id }){
             key={tweet.id} 
             tweet={tweet}
             handleRetweet={handleRetweet} 
-            className="py-4 px-3 border bg-white text-dark" 
+            className="py-4 px-3" 
             ></Tweet>
         <ListComments tweetId={tweet.id}></ListComments>
     </div>

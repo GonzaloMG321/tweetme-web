@@ -88,3 +88,16 @@ export const compareArrayTweets = (tweets, tweetsInit) => {
     }
     return existe
 }
+
+/*
+Borra los elementos del primer array que coinciden con los del segundo
+ */
+export const borrarElementos = (primerArray, segundoArray) => {
+    const nuevo = primerArray.filter(elemento => {
+        const coincide = segundoArray.some(elementoSegundoArray => {
+            return elemento.id === elementoSegundoArray.id
+        })
+        return !coincide
+    })
+    return nuevo
+}

@@ -67,10 +67,11 @@ function Tweet( props ){
         nombreUsuario = `${user.nombre} ${user.apellido_paterno}`
     }
 
-    return <div className={className} onClick={() => {
+    return <div className={`${className} box-tweet cursor-pointer text-dark`} onClick={() => {
         handleDetail(tweet.id)
     }}>
         <div className='d-flex'>
+            {tweet.id}
             <div>
                 <UserPicture picture={ user.profile.picture }></UserPicture>
             </div>
